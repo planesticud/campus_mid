@@ -190,3 +190,25 @@ func (c *PersonaController) ActualizarPersona() {
 	c.ServeJSON()
 
 }
+
+// GuardarDatosContacto ...
+// @Title PostDatosContacto
+// @Description Guardar Datos de Contacto
+// @Param	body		body 	models.PersonaDatosBasicos	true		"body for Guardar Persona content"
+// @Success 200 {string} models.Persona.Id
+// @Failure 403 body is empty
+// @router /GuardarDatosContacto [post]
+func (c *PersonaController) GuardarDatosContacto() {
+
+}
+
+// ActualizarDatosContacto ...
+// @Title ActualizarDatosContacto
+// @Description Actualizar Datos de Contacto
+// @Param	body		body 	models.PersonaDatosBasicos	true		"body for Actualizar Persona content"
+// @Success 200 {string} models.Persona.Id
+// @Failure 403 body is empty
+// @router /ActualizarDatosContacto [put]
+func (c *PersonaController) ActualizarDatosContacto() {
+
+}
