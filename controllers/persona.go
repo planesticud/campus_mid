@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	"github.com/astaxie/beego"
 	"github.com/udistrital/campus_mid/models"
@@ -194,11 +195,78 @@ func (c *PersonaController) ActualizarPersona() {
 // GuardarDatosContacto ...
 // @Title PostDatosContacto
 // @Description Guardar Datos de Contacto
-// @Param	body		body 	models.PersonaDatosBasicos	true		"body for Guardar Persona content"
+// @Param	body		body 	models.PersonaDatosBasicos	true		"body for Guardar datos contacto content"
 // @Success 200 {string} models.Persona.Id
 // @Failure 403 body is empty
 // @router /GuardarDatosContacto [post]
 func (c *PersonaController) GuardarDatosContacto() {
+
+	// datos de contacto de la persona
+	var datos map[string]interface{}
+	//reultado de la creacion de la persona
+	var resultado map[string]interface{}
+	// alerta que retorna la funcion Guardar persona
+	var alerta models.Alert
+	//acumulado de alertas
+	var alertas string
+
+	//valida que el JSON de entrada sea correcto
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &datos); err == nil {
+		//var contactos map[string]interface{}
+
+		contactos := datos["ContactoEnte"]
+		var contacto map[string]interface{}
+		contacto = make(map[string]interface{})
+
+		v := reflect.ValueOf(contactos)
+		contacto["Ente"] = datos["Ente"]
+		for i := 0; i < v.Len(); i++ {
+			fmt.Println(v.Index(i))
+			//m := v.Index(i)
+			n := v.Index(i).Interface()
+			o := n.(map[string]interface{})
+			contacto["TipoContacto"] = o
+			contacto["Valor"] = o["Valor"]
+
+			errContacto := request.SendJson("http://"+beego.AppConfig.String("PersonaService")+"/contacto_ente", "POST", &resultado, contacto)
+
+			if errContacto != nil {
+				alerta.Type = "error"
+				alerta.Code = "400"
+				alerta.Body = " ERROR al registrar el contacto"
+
+			} else {
+				if resultado["Type"] == "error" {
+					alerta.Type = resultado["Type"].(string)
+					alerta.Code = resultado["Code"].(string)
+					alerta.Body = " ERROR contacto, " + resultado["Body"].(string)
+				} else {
+					alertas = alertas + " Contacto registrado "
+					alerta.Type = "OK"
+					alerta.Code = "201"
+					alerta.Body = alertas
+				}
+			}
+			c.Data["json"] = alerta
+			c.ServeJSON()
+
+		}
+		//ubicacion
+		/*
+			var lugarUbicacion map[string]interface{}
+			lugarUbicacion = make(map[string]interface{})
+			errLugarUbicacion := request.SendJson("http://"+beego.AppConfig.String("UbicacionesService")+"/lugar_ubicacion", "POST", &resultado, lugarUbicacion)
+		*/
+
+	} else {
+		alerta.Type = "error"
+		alerta.Code = "400"
+		alerta.Body = "ERROR formato incorrecto" + err.Error()
+		c.Data["json"] = alerta
+		c.ServeJSON()
+	}
+
+	c.ServeJSON()
 
 }
 

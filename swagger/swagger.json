@@ -82,7 +82,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "body for Guardar Persona content",
+                        "description": "body for Guardar datos contacto content",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/.PersonaDatosBasicos"
