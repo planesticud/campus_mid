@@ -62,12 +62,12 @@ func (c *PersonaController) GuardarPersona() {
 			alerta.Code = "201"
 
 			var identificacion map[string]interface{}
-      identificacion = make(map[string]interface{})
-      identificacion["Ente"] = map[string]interface{}{"Id": resultado["Body"].(map[string]interface{})["Ente"]}
-      identificacion["TipoIdentificacion"]=map[string]interface{}{"Id": persona["TipoIdentificacion"]}
-      identificacion["NumeroIdentificacion"]=persona["NumeroDocumento"]
+			identificacion = make(map[string]interface{})
+			identificacion["Ente"] = map[string]interface{}{"Id": resultado["Body"].(map[string]interface{})["Ente"]}
+			identificacion["TipoIdentificacion"] = map[string]interface{}{"Id": persona["TipoIdentificacion"]}
+			identificacion["NumeroIdentificacion"] = persona["NumeroDocumento"]
 
-      errIdentificacion := request.SendJson("http://"+beego.AppConfig.String("EnteService")+"/identificacion", "POST", &resultadoIdentificacion, identificacion)
+			errIdentificacion := request.SendJson("http://"+beego.AppConfig.String("EnteService")+"/identificacion", "POST", &resultadoIdentificacion, identificacion)
 			if resultadoIdentificacion["Type"] == "error" || errIdentificacion != nil {
 				alertas = append(alertas, resultadoIdentificacion)
 				alerta.Type = "error"
@@ -75,7 +75,6 @@ func (c *PersonaController) GuardarPersona() {
 			} else {
 				alertas = append(alertas, []interface{}{" OK identificacion "})
 			}
-
 
 			var estadoCivil map[string]interface{}
 			estadoCivil = make(map[string]interface{})
@@ -249,18 +248,19 @@ func (c *PersonaController) ConsultaPersona() {
 
 	if errPersona == nil && resultado["Type"] != "error" && resultado != nil {
 		nuevapersona := map[string]interface{}{
-			"FechaNacimiento": 	resultado["Persona"].(map[string]interface{})["FechaNacimiento"],
-			"Foto":            	resultado["Persona"].(map[string]interface{})["Foto"],
-			"PrimerApellido":  resultado["Persona"].(map[string]interface{})["PrimerApellido"],
-			"PrimerNombre":    resultado["Persona"].(map[string]interface{})["PrimerNombre"],
-			"SegundoApellido": resultado["Persona"].(map[string]interface{})["SegundoApellido"],
-			"SegundoNombre":   resultado["Persona"].(map[string]interface{})["SegundoNombre"],
-			"Usuario":         resultado["Persona"].(map[string]interface{})["Usuario"],
-			"Id":              resultado["Persona"].(map[string]interface{})["Id"],
-			"EstadoCivil":     resultado["EstadoCivil"],
-			"Genero":          resultado["Genero"],
-			"TipoIdentificacion":  resultado["Identificacion"].(map[string]interface{})["TipoIdentificacion"],
-			"NumeroDocumento":  resultado["Identificacion"].(map[string]interface{})["NumeroIdentificacion"],
+			"FechaNacimiento":    resultado["Persona"].(map[string]interface{})["FechaNacimiento"],
+			"Foto":               resultado["Persona"].(map[string]interface{})["Foto"],
+			"PrimerApellido":     resultado["Persona"].(map[string]interface{})["PrimerApellido"],
+			"PrimerNombre":       resultado["Persona"].(map[string]interface{})["PrimerNombre"],
+			"SegundoApellido":    resultado["Persona"].(map[string]interface{})["SegundoApellido"],
+			"SegundoNombre":      resultado["Persona"].(map[string]interface{})["SegundoNombre"],
+			"Usuario":            resultado["Persona"].(map[string]interface{})["Usuario"],
+			"Id":                 resultado["Persona"].(map[string]interface{})["Id"],
+			"Ente":               resultado["Persona"].(map[string]interface{})["Ente"],
+			"EstadoCivil":        resultado["EstadoCivil"],
+			"Genero":             resultado["Genero"],
+			"TipoIdentificacion": resultado["Identificacion"].(map[string]interface{})["TipoIdentificacion"],
+			"NumeroDocumento":    resultado["Identificacion"].(map[string]interface{})["NumeroIdentificacion"],
 		}
 
 		c.Data["json"] = nuevapersona
@@ -614,9 +614,9 @@ func (c *PersonaController) ConsultaDatosComplementarios() {
 			fmt.Println(IdentificacionEnte)
 		}*/
 		var nuevapersona map[string]interface{}
-		if(GrupoEtnico==nil && Discapacidades==nil && UbicacionEnte==nil && GrupoSanguineo==nil && IdentificacionEnte==nil){
-    	nuevapersona=nil
-		}else{
+		if GrupoEtnico == nil && Discapacidades == nil && UbicacionEnte == nil && GrupoSanguineo == nil && IdentificacionEnte == nil {
+			nuevapersona = nil
+		} else {
 			if UbicacionEnte != nil {
 				for i := 0; i < len(UbicacionEnte); i++ {
 					//buscar relaciones del lugar
@@ -636,7 +636,7 @@ func (c *PersonaController) ConsultaDatosComplementarios() {
 			}
 
 			for i := 0; i < len(Discapacidades); i++ {
-				d:=Discapacidades[i]["TipoDiscapacidad"].(map[string]interface{})
+				d := Discapacidades[i]["TipoDiscapacidad"].(map[string]interface{})
 				TipoDiscapacidad = append(TipoDiscapacidad, d)
 			}
 
@@ -659,7 +659,7 @@ func (c *PersonaController) ConsultaDatosComplementarios() {
 					"Lugar":            UbicacionEnte,
 					"GrupoSanguineo":   TipoGrupoSanguineo,
 					"Rh":               TipoRh,
-					"Identificacion":    IdentificacionEnte,
+					"Identificacion":   IdentificacionEnte,
 					//"Foto":            resultado["Persona"].(map[string]interface{})["Foto"],
 				}
 			} else {
@@ -784,7 +784,7 @@ func (c *PersonaController) DatosComplementariosPersona() {
 			ente2["Id"] = persona["Ente"]
 			identificacion["Ente"] = ente2
 
-      /*evaluar si guardar la libreta militar
+			/*evaluar si guardar la libreta militar
 			identificacion["FechaExpedicion"] = persona["Identificacion"].(map[string]interface{})["FechaExpedicion"]
 			identificacion["LugarExpedicion"] = persona["Identificacion"].(map[string]interface{})["LugarExpedicion"]
 			identificacion["NumeroIdentificacion"] = persona["Identificacion"].(map[string]interface{})["NumeroIdentificacion"]
@@ -803,7 +803,7 @@ func (c *PersonaController) DatosComplementariosPersona() {
 			} else {
 				errores = append(errores, []interface{}{"error identifiacion: ", errIdentificacionEnte.Error()})
 			}
-      */
+			*/
 
 			//registro del lugar
 			var ubicacion map[string]interface{}
@@ -927,7 +927,7 @@ func (c *PersonaController) ActualizarDatosComplementarios() {
 				errores = append(errores, []interface{}{"el grupo sanguineo es incorrecto:", persona["GrupoSanguineo"], persona["Rh"]})
 			}
 
-/*####################################################################################*/
+			/*####################################################################################*/
 			//discapacidades enviadas en el form
 			discapacidades := persona["TipoDiscapacidad"].([]interface{})
 			//get discapacidades persona
@@ -941,12 +941,12 @@ func (c *PersonaController) ActualizarDatosComplementarios() {
 
 				for j := 0; j < len(persona_discapacidades); j++ {
 					persona_discapacidad := persona_discapacidades[j].(map[string]interface{})
-					d:= persona_discapacidad["TipoDiscapacidad"].(map[string]interface{})
+					d := persona_discapacidad["TipoDiscapacidad"].(map[string]interface{})
 
 					//está!!
-					if(d["Id"]==discapacidad["Id"]){
+					if d["Id"] == discapacidad["Id"] {
 						//verificar que esté activa, si no lo está activarla
-						if(persona_discapacidad["Activo"]==false){
+						if persona_discapacidad["Activo"] == false {
 							Discapacidad["Persona"] = resultado[0]
 							Discapacidad["TipoDiscapacidad"] = persona_discapacidad["TipoDiscapacidad"]
 							Discapacidad["Activo"] = true
@@ -963,7 +963,7 @@ func (c *PersonaController) ActualizarDatosComplementarios() {
 							}
 
 						}
-					}else{
+					} else {
 						//si no tiene la discapacidad se agrega
 						Discapacidad["Persona"] = resultado[0]
 						Discapacidad["TipoDiscapacidad"] = discapacidad
@@ -987,16 +987,16 @@ func (c *PersonaController) ActualizarDatosComplementarios() {
 			//verificar si se han quitado discapacidades
 			for j := 0; j < len(persona_discapacidades); j++ {
 				persona_discapacidad := persona_discapacidades[j].(map[string]interface{})
-				d:= persona_discapacidad["TipoDiscapacidad"].(map[string]interface{})
-				iguales:=false
+				d := persona_discapacidad["TipoDiscapacidad"].(map[string]interface{})
+				iguales := false
 
 				for i := 0; i < len(discapacidades); i++ {
 					discapacidad := discapacidades[i].(map[string]interface{})
-					if(d["Id"]==discapacidad["Id"]){
-						iguales=true
+					if d["Id"] == discapacidad["Id"] {
+						iguales = true
 					}
 				}
-				if(iguales==false){
+				if iguales == false {
 					//inactivar discapacidad
 					Discapacidad["Persona"] = resultado[0]
 					Discapacidad["TipoDiscapacidad"] = d
@@ -1014,7 +1014,7 @@ func (c *PersonaController) ActualizarDatosComplementarios() {
 					}
 				}
 			}
-/*####################################################################################*/
+			/*####################################################################################*/
 
 			request.GetJson("http://"+beego.AppConfig.String("EnteService")+"/ubicacion_ente/?query=Ente:"+fmt.Sprintf("%.f", persona["Ente"].(float64))+"&fields=Id", &id_ubicacion_ente)
 			//fmt.Println("el id de la ubicacion ente: ", id_ubicacion_ente)
@@ -1128,9 +1128,9 @@ func (c *PersonaController) DatosContacto() {
 
 		if errUbicacionEnte := request.GetJson("http://"+beego.AppConfig.String("EnteService")+"/ubicacion_ente/?query=Ente.Id:"+idStr+s+"&fields=Id,Lugar,TipoRelacionUbicacionEnte", &UbicacionEnte); errUbicacionEnte == nil {
 			var persona map[string]interface{}
-			if(ContactoEnte==nil && UbicacionEnte==nil){
-				persona=nil
-			}else{
+			if ContactoEnte == nil && UbicacionEnte == nil {
+				persona = nil
+			} else {
 				//buscar atributos de la ubicacion
 				var AtributosEnte []map[string]interface{}
 				var Lugar map[string]interface{}
