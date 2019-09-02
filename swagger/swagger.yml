@@ -194,6 +194,45 @@ paths:
           description: '{}'
         "403":
           description: :id is empty
+  /evaluacion_inscripcion/{id}:
+    get:
+      tags:
+      - evaluacion_inscripcion
+      description: consultar evaluacion por inscripcion_id
+      operationId: EvaluacionInscripcionController.GetEvaluacionInscripcion
+      parameters:
+      - in: path
+        name: inscripcion_id
+        description: The key for staticblock
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{}'
+        "403":
+          description: :id is empty
+    put:
+      tags:
+      - evaluacion_inscripcion
+      description: Modificar notas de la evaluación
+      operationId: EvaluacionInscripcionController.PutEvaluacionInscripcionAdmision
+      parameters:
+      - in: path
+        name: id
+        description: el id de la evaluacion a modificar
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: body Modificar Evaluacion content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "200":
+          description: '{}'
+        "403":
+          description: :id is empty
   /experiencia_laboral/:
     post:
       tags:
@@ -752,3 +791,6 @@ tags:
 - name: produccion_academica
   description: |
     FormacionController ...
+- name: evaluacion_inscripcion
+  description: |
+    AdmisionController ...

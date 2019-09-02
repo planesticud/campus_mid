@@ -88,6 +88,24 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:EvaluacionInscripcionController"] = append(beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:EvaluacionInscripcionController"],
+        beego.ControllerComments{
+            Method: "PutEvaluacionInscripcion",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:EvaluacionInscripcionController"] = append(beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:EvaluacionInscripcionController"],
+        beego.ControllerComments{
+            Method: "GetEvaluacionInscripcionByIdInscripcion",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:ExperienciaLaboralController"] = append(beego.GlobalControllerRouter["github.com/planesticud/campus_mid/controllers:ExperienciaLaboralController"],
         beego.ControllerComments{
             Method: "PostExperienciaLaboral",
