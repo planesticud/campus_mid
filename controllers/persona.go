@@ -1489,7 +1489,6 @@ func (c *PersonaController) GuardarDatosComplementarios() {
 						if errUbicacionPost == nil && fmt.Sprintf("%v", ubicacionPost["System"]) != "map[]" && ubicacionPost["Id"] != nil {
 							if ubicacionPost["Status"] != 400 {
 								discapacidades := persona["TipoDiscapacidad"].([]interface{})
-								fmt.Println("Nueva ubicacion:" + fmt.Sprintf("%v", ubicacionPost))
 
 								for i := 0; i < len(discapacidades); i++ {
 									var discapacidadPost map[string]interface{}
