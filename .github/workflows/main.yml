@@ -22,7 +22,10 @@ jobs:
         port: ${{ secrets.PORT }}
         envs: BRANCH,REPO
         script: |
+          cd /home/ec2-user/star_kill/services/planesticud
+          git clone https://github.com/$REPO
           cd /home/ec2-user/star_kill/services/$REPO
+          git checkout $BRANCH
           git pull origin $BRANCH
           docker-compose build
           docker-compose up -d
